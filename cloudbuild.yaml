@@ -1,0 +1,28 @@
+# Cloud Build configuration to deploy the application to Google Cloud Run
+steps:
+# 1. Build the Docker image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/store-locator-backend', '.']
+  id: Build
+
+# 2. Push the Docker image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/store-locator-backend']
+  id: Push
+
+# 3. Deploy the container to Cloud Run - CRITICAL FIX HERE
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: [
+    'run', 'deploy', 'store-locator-backend',
+    '--image', 'gcr.io/$PROJECT_ID/store-locator-backend',
+    '--region', 'us-central1', # Ensure this region matches your Cloud SQL region.
+    '--platform', 'managed',
+    '--allow-unauthenticated', # Allows public access
+
+    # FIX: Add the explicit flag to mount the SQL socket into the container
+    '--add-cloudsql-instances', 'store-locator-479313:us-central1:locations',
+
+    # FINAL DB ENVIRONMENT VARIABLES (excluding connection name, as the socket path is now mounted)
+    '--set-env-vars', 'DB_USER=postgres,DB_NAME=recycling_db,DB_PASSWORD=Edidiong1764$,INSTANCE_CONNECTION_NAME=store-locator-479313:us-central1:locations'
+  ]
+  id: Deploy

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Austin Recycling Drop-Off Locator</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Load the Google Maps JavaScript API with your actual key and the correct callback function (initMap) -->
+    <!-- FIX: callback name is now 'initMap' to match app.js -->
+    <script 
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDQfeSW8B23nKew7XwcIgIAzXVdbtMI-Q&libraries=places&callback=initMap" 
+        async defer
+    ></script>
+</head>
+<body>
+    <!-- Main container required for the responsive split layout defined in style.css -->
+    <div class="app-container">
+        
+        <!-- Sidebar for search and results -->
+        <div class="sidebar">
+            <header class="p-4 bg-gray-900 text-white">
+                <h1 class="text-xl font-bold">Austin Location Finder</h1>
+                <p class="text-sm">Find the closest drop-off location.</p>
+            </header>
+            
+            <div class="search-area">
+                <!-- This input is where app.js hooks the search logic -->
+                <input type="text" id="address-input" placeholder="Enter your address or zip code" class="search-input">
+                <button id="search-button" class="search-button">Search</button>
+            </div>
+
+            <!-- Store Results List -->
+            <!-- FIX: Removed the invalid duplicate id="panel" -->
+            <div id="store-list" class="store-list">
+                <p class="p-4 text-gray-500 text-sm">Search to find nearby locations!</p>
+            </div>
+        </div>
+
+        <!-- Main Map Area -->
+        <div id="map" class="map-container">
+            <!-- The Google Map will be rendered here -->
+        </div>
+    </div>
+
+    <!-- Load the main application logic AFTER the Google Maps API script -->
+    <script src="app.js"></script>
+</body>
+</html>

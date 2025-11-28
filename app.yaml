@@ -1,0 +1,29 @@
+service: store-locator-backend
+runtime: go # FIX: Reverting to generic 'go' to force Buildpack usage and select the latest supported version.
+env: flex
+
+env_variables:
+  INSTANCE_CONNECTION_NAME: store-locator-479313:us-central1:locations 
+  DB_USER: postgres
+  DB_NAME: recycling_db
+  DB_PASSWORD: Edidiong1764$ # Final, actual password set here
+  
+handlers:
+# This serves index.html at the root path (/)
+- url: /
+  static_files: static/index.html
+  upload: static/index.html
+# This serves all other static assets (JS, CSS)
+- url: /(.*\.(js|html|css))$
+  static_files: static/\1
+  upload: static/.*\.(js|html|css)$
+# This directs all other requests (like /api/search) to your Go backend application
+- url: /.*
+  script: auto
+
+manual_scaling:
+  instances: 1
+resources:
+  cpu: 1
+  memory_gb: 0.5
+  disk_size_gb: 10
